@@ -1,12 +1,21 @@
 from sanic import Sanic
-from sanic.response import json
+from sanic.response import json, html
 
 app = Sanic()
+
+def readhtml_file(filename):
+    with open(filename, "r") as f:
+        return f.read()
 
 
 @app.route("/")
 async def test(request):
     return json({"hello": "world"})
+
+
+@app.route("/index")
+async def index(request):
+    return html(readhtml_file("./views/layout.html"))
 
 
 if __name__ == "__main__":
