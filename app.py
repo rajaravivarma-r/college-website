@@ -3,6 +3,12 @@ from sanic.response import json, html
 
 app = Sanic()
 
+# Serve CSS files
+app.static("/css", "./static/css")
+# Serve JS files
+app.static("/js", "./static/js")
+
+
 def readhtml_file(filename):
     with open(filename, "r") as f:
         return f.read()
