@@ -46,6 +46,7 @@ def render_template(filename, request, **template_variables):
     return jinja_env.get_template(filename).render(
         errors=request.get("flash", {}).get("errors", []),
         info=request.get("flash", {}).get("info", []),
+        url_for=app.url_for,
         image_static_url=partial(app.url_for, "static", name="images"),
         **template_variables,
     )

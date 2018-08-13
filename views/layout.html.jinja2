@@ -7,14 +7,12 @@
     <script src="/js/bootstrap.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Memegram</a>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#upload-modal">
-          Upload Image
-        </button>
-      </div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <a class="navbar-brand" href="{{url_for('index')}}">Memegram</a>
+      <button type="button" class="btn btn-primary ml-auto" data-toggle="modal" data-target="#upload-modal">
+        Upload Image
+      </button>
     </nav>
 
     <div class="container" role="main">
