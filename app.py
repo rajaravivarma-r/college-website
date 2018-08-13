@@ -88,7 +88,7 @@ async def upload(request):
     else:
         request["flash"]("Please upload a file", "danger")
 
-    return await index(request)
+    return redirect(app.url_for("index"))
 
 
 @app.route("/index")
