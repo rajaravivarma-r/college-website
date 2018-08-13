@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from hashlib import md5
 
 import peewee
@@ -8,6 +9,7 @@ from sanic.response import json, html, redirect
 from memegram.db.models import Image
 
 UPLOAD_DIRECTORY = "./static/pictures"
+VIEWS_PATH = Path(__file__).parent.joinpath("views")
 
 app = Sanic()
 
@@ -32,7 +34,7 @@ def save_image_details(image_file, image_filepath):
 
 
 def readhtml_file(filename):
-    with open(filename, "r") as f:
+    with open(VIEWS_PATH.joinpath(filename), "r") as f:
         return f.read()
 
 
@@ -43,8 +45,8 @@ async def test(request):
 
 @app.route("/upload", methods=["POST"])
 async def upload(request):
-    if len(request.files["picture"]) > 0:
-        picture_file = request.files["picture"][0]
+    picture_file = request.files["picture"][0]
+    if len(picture_file.name) > 0:
         filepath = os.path.join(UPLOAD_DIRECTORY, picture_file.name)
         save_image_details(picture_file, filepath)
 
@@ -56,7 +58,7 @@ async def upload(request):
 
 @app.route("/index")
 async def index(request):
-    return html(readhtml_file("./views/layout.html"))
+    return html(readhtml_file("layout.html"))
 
 
 if __name__ == "__main__":
