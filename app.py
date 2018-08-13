@@ -45,6 +45,20 @@ def save_image_details(image_file, image_filepath):
         return False
 
 
+@app.middleware("request")
+async def add_session_to_request(request):
+    # before each request initialize a session
+    # using the client's request
+    await session.open(request)
+
+
+@app.middleware("response")
+async def save_session(request, response):
+    # after each request save the session,
+    # pass the response to set client cookies
+    await session.save(request, response)
+
+
 def render_template(filename, request, **template_variables):
     return jinja.render(
         filename,
@@ -68,11 +82,11 @@ async def upload(request):
         if save_image_details(picture_file, filepath):
             with open(filepath, "wb") as f:
                 f.write(picture_file.body)
-            request["flash"] = {"info": ["successfully saved image"]}
+            request["flash"]("successfully saved image", "success")
         else:
-            request["flash"] = {"errors": ["Image file already exists"]}
+            request["flash"]("Image file already exists", "danger")
     else:
-        request["flash"] = {"errors": ["Please upload a file"]}
+        request["flash"]("Please upload a file", "danger")
 
     return await index(request)
 

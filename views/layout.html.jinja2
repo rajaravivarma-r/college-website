@@ -16,6 +16,13 @@
     </nav>
 
     <div class="container" role="main">
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+      <div class="alert alert-{{category}} alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{message}}</strong>
+          </div>
+      {% endfor %}
+
       {% if errors is defined %}
         {% for error in errors %}
           <div class="alert alert-danger alert-dismissible">
