@@ -43,9 +43,13 @@
       </form>
 
       {% if image_files is defined %}
-        {% for image_file in image_files %}
-          <img src="{{image_static_url(filename=image_file.filename)}}"/>
-        {% endfor %}
+        <div class="card-columns">
+          {% for image_file in image_files %}
+            <div class="card">
+              <img class="card-img-top" src="{{image_static_url(filename=image_file.filename)}}"/>
+            </div>
+          {% endfor %}
+        </div>
       {% endif %}
 
     </div>
