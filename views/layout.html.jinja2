@@ -11,10 +11,9 @@
       <a class="navbar-brand" href="#">Memegram</a>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#upload-modal">
+          Upload Image
+        </button>
       </div>
     </nav>
 
@@ -36,12 +35,32 @@
           </div>
         {% endfor %}
       {% endif %}
-      <form action="upload" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-          <input type="file" name="picture" accept="image/*" class="form-control">
+
+
+      <!-- The Modal -->
+      <div class="modal" id="upload-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Upload Image</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form action="upload" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                  <input id="picture" type="file" name="picture" accept="image/*" class="form-control">
+                </div>
+                <button class="btn btn-primary" type="submit">Upload</button>
+              </form>
+            </div>
+
+          </div>
         </div>
-        <button class="btn btn-primary" type="submit">Upload</button>
-      </form>
+      </div>
 
       {% if image_files is defined %}
         <div class="card-columns">
