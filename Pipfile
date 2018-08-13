@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 sanic = "*"
+peewee = "*"
 
 [dev-packages]
 ptpython = "*"
