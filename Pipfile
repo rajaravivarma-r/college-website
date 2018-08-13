@@ -8,6 +8,7 @@ sanic = "*"
 peewee = "*"
 "jinja2" = "*"
 "sanic-jinja2" = "*"
+sanic-session = "*"
 
 [dev-packages]
 ptpython = "*"
