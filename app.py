@@ -4,6 +4,8 @@ from hashlib import md5
 from functools import partial
 
 import peewee
+from sanic_session import InMemorySessionInterface
+from sanic_jinja2 import SanicJinja2
 from sanic import Sanic
 from sanic.response import json, html, redirect
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -15,17 +17,18 @@ VIEWS_PATH = Path(__file__).parent.joinpath("views")
 
 app = Sanic()
 
+jinja = SanicJinja2(app, loader=FileSystemLoader(str(VIEWS_PATH)))
+session = InMemorySessionInterface(cookie_name=app.name, prefix=app.name)
+
+jinja.add_env(
+    "image_static_url", partial(app.url_for, "static", name="images")
+)
 # Serve CSS files
 app.static("/css", "./static/css")
 # Serve JS files
 app.static("/js", "./static/js")
 # Serve Image files
 app.static("/images", "./static/pictures", name="images")
-
-jinja_env = Environment(
-    loader=FileSystemLoader(str(VIEWS_PATH)),
-    autoescape=select_autoescape(["html", "xml"]),
-)
 
 
 def save_image_details(image_file, image_filepath):
@@ -43,11 +46,10 @@ def save_image_details(image_file, image_filepath):
 
 
 def render_template(filename, request, **template_variables):
-    return jinja_env.get_template(filename).render(
+    return jinja.render(
+        filename,
         errors=request.get("flash", {}).get("errors", []),
         info=request.get("flash", {}).get("info", []),
-        url_for=app.url_for,
-        image_static_url=partial(app.url_for, "static", name="images"),
         **template_variables,
     )
 
@@ -78,9 +80,7 @@ async def upload(request):
 @app.route("/index")
 async def index(request):
     image_files = Image.select()
-    return html(
-        render_template("layout.html.jinja2", request, image_files=image_files)
-    )
+    return jinja.render("layout.html.jinja2", request, image_files=image_files)
 
 
 if __name__ == "__main__":
