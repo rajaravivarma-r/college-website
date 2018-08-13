@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from hashlib import md5
+from functools import partial
 
 import peewee
 from sanic import Sanic
@@ -18,6 +19,8 @@ app = Sanic()
 app.static("/css", "./static/css")
 # Serve JS files
 app.static("/js", "./static/js")
+# Serve Image files
+app.static("/images", "./static/pictures", name="images")
 
 jinja_env = Environment(
     loader=FileSystemLoader(str(VIEWS_PATH)),
@@ -39,10 +42,12 @@ def save_image_details(image_file, image_filepath):
         return False
 
 
-def render_template(filename, request):
+def render_template(filename, request, **template_variables):
     return jinja_env.get_template(filename).render(
         errors=request.get("flash", {}).get("errors", []),
         info=request.get("flash", {}).get("info", []),
+        image_static_url=partial(app.url_for, "static", name="images"),
+        **template_variables,
     )
 
 
@@ -71,7 +76,10 @@ async def upload(request):
 
 @app.route("/index")
 async def index(request):
-    return html(render_template("layout.html.jinja2", request))
+    image_files = Image.select()
+    return html(
+        render_template("layout.html.jinja2", request, image_files=image_files)
+    )
 
 
 if __name__ == "__main__":

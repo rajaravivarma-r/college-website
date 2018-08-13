@@ -42,6 +42,12 @@
         <button class="btn btn-primary" type="submit">Upload</button>
       </form>
 
+      {% if image_files is defined %}
+        {% for image_file in image_files %}
+          <img src="{{image_static_url(filename=image_file.filename)}}"/>
+        {% endfor %}
+      {% endif %}
+
     </div>
   </body>
 </html>
